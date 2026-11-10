@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Kenan Sakarcan">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+</style>
+<title>Kenan Sakarcan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap">
+<style>
+/* Layout: one quiet 432px text column, small type, hairline-divided rows with a muted left label column. */
+:root {
+  --bg: #FCFCFB;
+  --fg: #111111;
+  --muted: #8F8F8F;
+  --line: #EDEDEC;
+  --underline: #CFCFCD;
+  --ph: #F1F1EF;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111111; --fg: #EDEDED; --muted: #7D7D7D; --line: #222222; --underline: #444444; --ph: #1B1B1B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111111; --fg: #EDEDED; --muted: #7D7D7D; --line: #222222; --underline: #444444; --ph: #1B1B1B;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 460;
+  letter-spacing: -0.09px;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: calc(760px + 32px);
+  margin: 0 auto;
+  padding-block: 64px 96px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 48px;
+}
+p { margin: 0; }
+a { color: var(--fg); text-decoration: none; }
+.prose a { border-bottom: 1px solid var(--underline); transition: border-color .15s; }
+.prose a:hover { border-color: var(--fg); }
+a:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 2px; }
+.muted { color: var(--muted); }
+
+/* Header */
+header { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  background: var(--ph); color: var(--muted);
+  display: grid; place-items: center; font-size: 12px; overflow: hidden;
+}
+header { flex-wrap: wrap; }
+.clock {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.clock svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 400px) { .clock { margin-left: 52px; } }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.prose { display: grid; gap: 12px; }
+
+/* Section label + rows */
+.label { color: var(--muted); font-weight: 460; font-size: 14px; margin: 0 0 8px; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row {
+  display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline;
+  padding: 6px 0; border-top: 1px solid var(--line);
+}
+.row:first-child { border-top: 0; }
+.row .title { min-width: 0; }
+.row .meta { color: var(--muted); font-variant-numeric: tabular-nums; }
+a.row:hover .title { color: var(--muted); }
+
+/* Photo carousel: swipeable strip that snaps to each photo, with the next one peeking in */
+.page { grid-template-columns: minmax(0, 1fr); }
+/* Text stays in the narrow column; only the photo section uses the full page width */
+.page > * { width: 100%; max-width: 432px; justify-self: center; }
+.page > .gallery { max-width: none; }
+.carousel-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 8px; }
+.carousel-head .label { margin: 0; }
+.carousel-nav { display: flex; gap: 2px; }
+.carousel-nav button {
+  width: 28px; height: 28px; padding: 0; border: 0; border-radius: 6px;
+  background: transparent; color: var(--fg); font: inherit; cursor: pointer;
+  transition: background .15s;
+}
+.carousel-nav button:hover:not(:disabled) { background: var(--ph); }
+.carousel-nav button:disabled { color: var(--muted); opacity: .5; cursor: default; }
+.carousel-nav button:focus-visible, .carousel:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.carousel {
+  display: flex; gap: 8px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; border-radius: 6px;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.carousel { position: relative; }
+/* Every photo shares one height and keeps its own proportions, so nothing is cropped */
+.slide { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
+.slide img {
+  height: min(480px, calc((100vw - 32px) / 1.5)); width: auto; max-width: none;
+  display: block; border-radius: 6px; background: var(--ph);
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<main class="page">
+  <header>
+    <div class="avatar"><img src="photos/portrait.jpg" width="240" height="240" alt="Kenan Sakarcan ski touring"></div>
+    <div>
+      <div>Kenan Sakarcan</div>
+      <div class="muted">Updated Nov 9, 2026</div>
+    </div>
+    <div class="clock muted" aria-live="off">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 4.75V8l2.25 1.5"/></svg>
+      <span><time id="clock-time">--:--</time> <span id="clock-tz">PST</span> in Seattle, WA</span>
+    </div>
+  </header>
+  <script>
+    (function () {
+      var t = document.getElementById('clock-time'), z = document.getElementById('clock-tz');
+      function tick() {
+        var now = new Date();
+        var parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).formatToParts(now);
+        var get = function (k) { var p = parts.find(function (x) { return x.type === k; }); return p ? p.value : ''; };
+        t.textContent = get('hour') + ':' + get('minute') + ' ' + get('dayPeriod');
+        z.textContent = get('timeZoneName') || 'PST';
+      }
+      tick();
+      setInterval(tick, 15000);
+    })();
+  </script>
+
+  <section aria-labelledby="links-h">
+    <h2 class="label" id="links-h">Links</h2>
+    <div class="rows">
+      <a class="row" href="https://www.linkedin.com/in/kenansakarcan/" target="_blank" rel="noopener"><span class="title">LinkedIn</span></a>
+      <a class="row" href="https://www.joinleland.com/kenansakarcangmailcom-kenansakarcangmailcom" target="_blank" rel="noopener"><span class="title">Coaching - 10+ 5 star reviews and counting</span></a>
+    </div>
+  </section>
+
+  <section class="gallery" aria-labelledby="photos-h">
+    <div class="carousel-head">
+      <h2 class="label" id="photos-h">Photos</h2>
+      <div class="carousel-nav">
+        <button type="button" id="carousel-prev" aria-label="Previous photo">&larr;</button>
+        <button type="button" id="carousel-next" aria-label="Next photo">&rarr;</button>
+      </div>
+    </div>
+    <div class="carousel" id="carousel" tabindex="0" role="group" aria-label="Photo carousel">
+      <figure class="slide"><img src="photos/bike.jpg" width="768" height="1024" alt="Shadow of a person riding a bike, cast on a bright green hillside"></figure>
+      <figure class="slide"><img src="photos/hills.jpg" width="1400" height="1050" alt="Green coastal hills in evening light, with a city and the ocean on the horizon"></figure>
+      <figure class="slide"><img src="photos/horses.jpg" width="1400" height="1304" loading="lazy" alt="Horses running through a golden meadow past a gnarled tree, with rocky mountains behind"></figure>
+      <figure class="slide"><img src="photos/rainier.jpg" width="1050" height="1400" loading="lazy" alt="Snow-covered volcano across a calm lake under a pink and orange sunset"></figure>
+      <figure class="slide"><img src="photos/peaks.jpg" width="1400" height="1050" loading="lazy" alt="Jagged snow-covered peaks under broken clouds"></figure>
+      <figure class="slide"><img src="photos/ship.jpg" width="1400" height="1050" loading="lazy" alt="Cargo ship on calm water at sunset, seen past a silhouetted tree"></figure>
+      <figure class="slide"><img src="photos/climb.jpg" width="1050" height="1400" loading="lazy" alt="Climber with pink skis on their pack ascending a steep snow slope beside a rock wall"></figure>
+      <figure class="slide"><img src="photos/tent.jpg" width="1400" height="1050" loading="lazy" alt="Blue tent and upright skis at a snow camp below a glaciated mountain basin"></figure>
+      <figure class="slide"><img src="photos/glacier.jpg" width="1400" height="933" loading="lazy" alt="Broad glacier and sharp snowy summit under a deep blue sky"></figure>
+      <figure class="slide"><img src="photos/skin.jpg" width="1400" height="933" loading="lazy" alt="Ski tourer with a blue pack crossing a snowfield above a wide range of glaciated peaks"></figure>
+      <figure class="slide"><img src="photos/ski.jpg" width="787" height="1400" loading="lazy" alt="Skier in an orange jacket descending a steep snowfield, with a snow-covered volcano in the distance"></figure>
+    </div>
+  </section>
+  <script>
+    (function () {
+      var track = document.getElementById('carousel');
+      var prev = document.getElementById('carousel-prev');
+      var next = document.getElementById('carousel-next');
+      function target(dir) {
+        var slides = Array.prototype.slice.call(track.children);
+        var x = track.scrollLeft;
+        var max = track.scrollWidth - track.clientWidth;
+        /* Past either end, wrap around to the other end */
+        if (dir > 0 && x >= max - 1) return 0;
+        if (dir < 0 && x <= 1) return max;
+        var hit = dir > 0
+          ? slides.filter(function (s) { return s.offsetLeft > x + 1; })[0]
+          : slides.filter(function (s) { return s.offsetLeft < x - 1; }).pop();
+        return hit ? hit.offsetLeft : x;
+      }
+      function move(dir) {
+        track.scrollTo({ left: target(dir), behavior: 'auto' });
+      }
+      prev.addEventListener('click', function () { move(-1); });
+      next.addEventListener('click', function () { move(1); });
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); move(1); }
+      });
+    })();
+  </script>
+</main>
+</body>
+</html>
