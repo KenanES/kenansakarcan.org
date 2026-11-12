@@ -48,7 +48,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 .page {
-  max-width: calc(760px + 32px);
+  max-width: calc(1200px + 32px);
   margin: 0 auto;
   padding-block: 64px 96px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -97,7 +97,7 @@ a.row:hover .title { color: var(--muted); }
 /* Text stays in the narrow column; only the photo section uses the full page width */
 .page > * { width: 100%; max-width: 432px; justify-self: center; }
 .page > .gallery { max-width: none; }
-.carousel-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 8px; }
+.carousel-head { display: flex; align-items: center; justify-content: flex-end; margin: 0 0 8px; }
 .carousel-head .label { margin: 0; }
 .carousel-nav { display: flex; gap: 2px; }
 .carousel-nav button {
@@ -109,16 +109,18 @@ a.row:hover .title { color: var(--muted); }
 .carousel-nav button:disabled { color: var(--muted); opacity: .5; cursor: default; }
 .carousel-nav button:focus-visible, .carousel:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 .carousel {
-  display: flex; gap: 8px;
+  display: flex; gap: 8px; align-items: center;
   overflow-x: auto; scroll-snap-type: x mandatory;
   scrollbar-width: none; border-radius: 6px;
 }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel { position: relative; }
-/* Every photo shares one height and keeps its own proportions, so nothing is cropped */
+/* Each photo fills a large frame as far as its proportions allow, so nothing is cropped */
 .slide { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
-.slide img {
-  height: min(480px, calc((100vw - 32px) / 1.5)); width: auto; max-width: none;
+.slide img, .slide video {
+  width: auto; height: auto;
+  max-height: min(680px, 78vh);
+  max-width: min(1200px, calc(100vw - 32px));
   display: block; border-radius: 6px; background: var(--ph);
 }
 
@@ -132,7 +134,7 @@ a.row:hover .title { color: var(--muted); }
     <div class="avatar"><img src="photos/portrait.jpg" width="240" height="240" alt="Kenan Sakarcan ski touring"></div>
     <div>
       <div>Kenan Sakarcan</div>
-      <div class="muted">Updated Nov 9, 2026</div>
+      <div class="muted">Updated Nov 11, 2026</div>
     </div>
     <div class="clock muted" aria-live="off">
       <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 4.75V8l2.25 1.5"/></svg>
@@ -162,15 +164,15 @@ a.row:hover .title { color: var(--muted); }
     </div>
   </section>
 
-  <section class="gallery" aria-labelledby="photos-h">
+  <section class="gallery" aria-label="Photo gallery">
     <div class="carousel-head">
-      <h2 class="label" id="photos-h">Photos</h2>
       <div class="carousel-nav">
         <button type="button" id="carousel-prev" aria-label="Previous photo">&larr;</button>
         <button type="button" id="carousel-next" aria-label="Next photo">&rarr;</button>
       </div>
     </div>
     <div class="carousel" id="carousel" tabindex="0" role="group" aria-label="Photo carousel">
+      <figure class="slide"><video id="barn-video" src="photos/barn.mp4" poster="photos/barn.jpg" width="720" height="1280" autoplay muted loop playsinline preload="auto" aria-label="Red barn under heavy falling snow"></video></figure>
       <figure class="slide"><img src="photos/bike.jpg" width="768" height="1024" alt="Shadow of a person riding a bike, cast on a bright green hillside"></figure>
       <figure class="slide"><img src="photos/hills.jpg" width="1400" height="1050" alt="Green coastal hills in evening light, with a city and the ocean on the horizon"></figure>
       <figure class="slide"><img src="photos/horses.jpg" width="1400" height="1304" loading="lazy" alt="Horses running through a golden meadow past a gnarled tree, with rocky mountains behind"></figure>
@@ -181,6 +183,13 @@ a.row:hover .title { color: var(--muted); }
       <figure class="slide"><img src="photos/tent.jpg" width="1400" height="1050" loading="lazy" alt="Blue tent and upright skis at a snow camp below a glaciated mountain basin"></figure>
       <figure class="slide"><img src="photos/glacier.jpg" width="1400" height="933" loading="lazy" alt="Broad glacier and sharp snowy summit under a deep blue sky"></figure>
       <figure class="slide"><img src="photos/skin.jpg" width="1400" height="933" loading="lazy" alt="Ski tourer with a blue pack crossing a snowfield above a wide range of glaciated peaks"></figure>
+      <figure class="slide"><img src="photos/guanaco.jpg" width="1325" height="593" loading="lazy" alt="Guanaco standing in golden grass beside a lake under a wide cloudy sky"></figure>
+      <figure class="slide"><img src="photos/waterfall.jpg" width="1047" height="751" loading="lazy" alt="Waterfall over layered rock with snowy granite towers behind"></figure>
+      <figure class="slide"><img src="photos/skicamp.jpg" width="1024" height="768" loading="lazy" alt="Two skiers at a snow camp below steep rocky cliffs"></figure>
+      <figure class="slide"><img src="photos/gravel.jpg" width="1024" height="768" loading="lazy" alt="Gravel bike on a dirt road beside a weathered barn and autumn hills"></figure>
+      <figure class="slide"><img src="photos/tourer.jpg" width="1224" height="642" loading="lazy" alt="Ski tourer with a yellow pack looking across a wide snowy basin"></figure>
+      <figure class="slide"><img src="photos/valley.jpg" width="1024" height="768" loading="lazy" alt="Forested valley with a snow-dusted peak catching evening light"></figure>
+      <figure class="slide"><img src="photos/summit.jpg" width="1213" height="648" loading="lazy" alt="Climber on a roped snow route at sunrise above a sea of clouds"></figure>
       <figure class="slide"><img src="photos/ski.jpg" width="787" height="1400" loading="lazy" alt="Skier in an orange jacket descending a steep snowfield, with a snow-covered volcano in the distance"></figure>
     </div>
   </section>
@@ -203,6 +212,22 @@ a.row:hover .title { color: var(--muted); }
       }
       function move(dir) {
         track.scrollTo({ left: target(dir), behavior: 'auto' });
+      }
+      /* The barn video loops while it is on screen and pauses once scrolled away */
+      var vid = document.getElementById('barn-video');
+      if (vid) {
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (still) { vid.removeAttribute('autoplay'); vid.pause(); }
+        var play = function () { var p = vid.play(); if (p && p.catch) p.catch(function () {}); };
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting && e.intersectionRatio >= 0.25) { if (!still) play(); }
+              else if (!e.isIntersecting) vid.pause();
+            });
+          }, { threshold: [0, 0.25] }).observe(vid);
+        }
+        vid.addEventListener('click', function () { if (vid.paused) play(); else vid.pause(); });
       }
       prev.addEventListener('click', function () { move(-1); });
       next.addEventListener('click', function () { move(1); });
