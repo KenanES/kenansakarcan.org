@@ -71,6 +71,14 @@ header { flex-wrap: wrap; }
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .clock svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.clock svg.analog { width: 20px; height: 20px; color: var(--fg); }
+.analog .rim { fill: var(--bg); stroke-width: 1.4; }
+.analog .tick { stroke-width: .7; opacity: .55; }
+.analog .tick.q { stroke-width: 1.1; opacity: 1; }
+.analog .hand-h { stroke-width: 1.9; }
+.analog .hand-m { stroke-width: 1.3; }
+.analog .hand-s { stroke: #D2462D; stroke-width: .6; }
+.analog .cap { fill: currentColor; stroke: none; }
 @media (max-width: 400px) { .clock { margin-left: 0; } }
 .name-line { display: flex; align-items: center; gap: 2px; }
 .throw-btn {
@@ -144,22 +152,29 @@ a.row:hover .title { color: var(--muted); }
       <div class="muted">Updated Nov 11, 2026</div>
     </div>
     <div class="clock muted" aria-live="off">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 4.75V8l2.25 1.5"/></svg>
+      <svg class="analog" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.6" class="rim"/><line x1="12" y1="2.6" x2="12" y2="4.6" transform="rotate(0 12 12)" class="tick q"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(30 12 12)" class="tick"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(60 12 12)" class="tick"/><line x1="12" y1="2.6" x2="12" y2="4.6" transform="rotate(90 12 12)" class="tick q"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(120 12 12)" class="tick"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(150 12 12)" class="tick"/><line x1="12" y1="2.6" x2="12" y2="4.6" transform="rotate(180 12 12)" class="tick q"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(210 12 12)" class="tick"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(240 12 12)" class="tick"/><line x1="12" y1="2.6" x2="12" y2="4.6" transform="rotate(270 12 12)" class="tick q"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(300 12 12)" class="tick"/><line x1="12" y1="2.9" x2="12" y2="3.8" transform="rotate(330 12 12)" class="tick"/><line id="hand-h" x1="12" y1="13.2" x2="12" y2="7.4" class="hand-h"/><line id="hand-m" x1="12" y1="13.6" x2="12" y2="4.6" class="hand-m"/><line id="hand-s" x1="12" y1="14.4" x2="12" y2="3.6" class="hand-s"/><circle cx="12" cy="12" r="1.15" class="cap"/></svg>
       <span><time id="clock-time">--:--</time> <span id="clock-tz">PST</span> in Seattle, WA</span>
     </div>
   </header>
   <script>
     (function () {
       var t = document.getElementById('clock-time'), z = document.getElementById('clock-tz');
+      var hh = document.getElementById('hand-h'), mm = document.getElementById('hand-m'), ss = document.getElementById('hand-s');
+      var fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', second: '2-digit', hourCycle: 'h12', timeZoneName: 'short' });
       function tick() {
-        var now = new Date();
-        var parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).formatToParts(now);
+        var parts = fmt.formatToParts(new Date());
         var get = function (k) { var p = parts.find(function (x) { return x.type === k; }); return p ? p.value : ''; };
+        var h = (+get('hour')) % 12, m = +get('minute'), sec = +get('second');
         t.textContent = get('hour') + ':' + get('minute') + ' ' + get('dayPeriod');
         z.textContent = get('timeZoneName') || 'PST';
+        if (hh) {
+          hh.setAttribute('transform', 'rotate(' + (h * 30 + m * 0.5) + ' 12 12)');
+          mm.setAttribute('transform', 'rotate(' + (m * 6 + sec * 0.1) + ' 12 12)');
+          ss.setAttribute('transform', 'rotate(' + (sec * 6) + ' 12 12)');
+        }
       }
       tick();
-      setInterval(tick, 15000);
+      setInterval(tick, 1000);
     })();
   </script>
 
