@@ -79,9 +79,24 @@ header { flex-wrap: wrap; }
 .clock svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 400px) { .header-right { margin-left: 52px; grid-auto-flow: column; align-items: center; gap: 8px; } }
 /* LinkedIn icon, top-right under the clock (beside it on narrow phones) */
-.social { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: -2px; color: var(--muted); border-radius: 4px; transition: color .15s; }
-.social:hover { color: var(--fg); }
-.social svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.social { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: -2px; color: #0A66C2; border-radius: 4px; transition: color .15s; }
+.social:hover { color: #004182; }
+.social svg { width: 17px; height: 17px; }
+.social rect { fill: currentColor; }
+.social path { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Replay button for the paper airplane, top-left where the hand appears */
+.throw-btn {
+  position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); left: max(14px, env(safe-area-inset-left, 0px));
+  display: grid; justify-items: center; gap: 1px; padding: 6px 6px 4px;
+  border: 0; border-radius: 6px; background: transparent; color: var(--muted);
+  font: inherit; font-size: 10px; line-height: 12px; letter-spacing: .02em; cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.throw-btn:hover { color: var(--fg); background: var(--ph); }
+.throw-btn:hover svg { transform: translate(1px, -1px) rotate(-6deg); }
+.throw-btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.throw-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
 .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .prose { display: grid; gap: 12px; }
 
@@ -133,6 +148,10 @@ a.row:hover .title { color: var(--muted); }
 </style>
 </head>
 <body>
+<button type="button" class="throw-btn" id="throw-btn" aria-label="Throw paper airplane" title="Throw the paper airplane">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 21 4l-5.5 16-4-6.5z"/><path d="M11.5 13.5 21 4"/></svg>
+  <span>throw</span>
+</button>
 
 <main class="page">
   <header>
@@ -147,7 +166,7 @@ a.row:hover .title { color: var(--muted); }
       <span><time id="clock-time">--:--</time> <span id="clock-tz">PST</span> in Seattle, WA</span>
     </div>
     <a class="social" href="https://www.linkedin.com/in/kenansakarcan/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2.5"/><path d="M5 7v4.25M5 4.9v.1M7.75 11.25V7m0 1.9c0-1.1.85-1.9 1.85-1.9S11.5 7.8 11.5 8.9v2.35"/></svg>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="2.5"/><path d="M4.9 7v4.6M4.9 4.6v.1M7.6 11.6V7m0 2c0-1.2.9-2 2-2s1.9.8 1.9 2v2.6"/></svg>
     </a>
     </div>
   </header>
@@ -324,75 +343,102 @@ a.row:hover .title { color: var(--muted); }
 </div>
 <script>
   (function () {
-    var replay = /[?&]throw\b/.test(location.search);
-    if (!replay && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    try {
-      if (!replay && sessionStorage.getItem('plane-thrown')) return;
-      sessionStorage.setItem('plane-thrown', '1');
-    } catch (e) {}
     var root = document.getElementById('throw');
     var hand = document.getElementById('throw-hand');
     var held = document.getElementById('plane-held');
     var fly = document.getElementById('plane-fly');
     var path = document.getElementById('throw-path');
     var trail = document.getElementById('throw-trail');
-    if (!root || !hand.animate || !path.getPointAtLength) return;
-    root.hidden = false;
+    var btn = document.getElementById('throw-btn');
+    if (!root || !hand.animate || !path.getPointAtLength) { if (btn) btn.hidden = true; return; }
+    var timers = [], raf = 0;
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 
-    /* 1. Hand reaches down from the top-left, cocks back, then slowly swings forward */
-    var windup = 2600, releaseAt = 1870;
-    hand.animate([
-      { transform: 'translate(-55%, -55%) rotate(22deg)', opacity: 0 },
-      { transform: 'translate(0, 0) rotate(16deg)', opacity: 1, offset: .38 },
-      { transform: 'translate(1%, 1%) rotate(26deg)', opacity: 1, offset: .58 },
-      { transform: 'translate(5%, 5%) rotate(-16deg)', opacity: 1, offset: .76 },
-      { transform: 'translate(5%, 5%) rotate(-14deg)', opacity: 1 }
-    ], { duration: windup, easing: 'cubic-bezier(.3,.6,.3,1)', fill: 'forwards' });
+    /* Stop any throw in progress and put everything back in the hand */
+    function reset() {
+      timers.forEach(clearTimeout); timers = [];
+      cancelAnimationFrame(raf);
+      if (hand.getAnimations) hand.getAnimations().forEach(function (a) { a.cancel(); });
+      held.setAttribute('visibility', 'visible');
+      fly.setAttribute('visibility', 'hidden');
+      trail.setAttribute('d', '');
+      trail.style.opacity = '';
+      /* Hiding and re-showing restarts the pencil lines drawing themselves in */
+      root.hidden = true;
+      void root.offsetWidth;
+    }
 
-    /* 2. Let go: the plane leaves the fingertips and flies across the page */
-    setTimeout(function () {
-      var box = held.getBoundingClientRect();
-      var x0 = box.left + box.width / 2, y0 = box.top + box.height / 2;
-      held.setAttribute('visibility', 'hidden');
-      var w = window.innerWidth, h = window.innerHeight;
-      /* Glide down and across, dip, then float up and off the right edge */
-      path.setAttribute('d',
-        'M ' + x0 + ' ' + y0 +
-        ' C ' + (w * .3) + ' ' + (y0 + h * .05) + ', ' + (w * .4) + ' ' + (h * .55) + ', ' + (w * .55) + ' ' + (h * .48) +
-        ' S ' + (w * .8) + ' ' + (h * .15) + ', ' + (w + 140) + ' ' + (h * .3));
-      var L = path.getTotalLength();
-      var dur = Math.min(7000, Math.max(5000, L * 3));
-      var scale = w < 600 ? 1 : 1.35;
-      var pts = [];
-      var start = performance.now();
-      fly.setAttribute('visibility', 'visible');
-      function frame(now) {
-        var t = Math.min(1, (now - start) / dur);
-        var e = 1 - Math.pow(1 - t, 1.4);
-        var s = e * L;
-        var p = path.getPointAtLength(s);
-        var q = path.getPointAtLength(Math.min(L, s + 2));
-        var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI + Math.sin(t * 9) * 5 * (1 - t);
-        /* Flipped like the hand, so the plane matches the one that was in its fingers */
-        fly.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + ang + ') scale(' + scale + ' ' + (-scale) + ')');
-        pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
-        trail.setAttribute('d', 'M ' + pts.join(' L '));
-        if (t < 1) requestAnimationFrame(frame);
-        else {
-          trail.style.opacity = '0';
-          setTimeout(function () { root.remove(); }, 1300);
-        }
-      }
-      requestAnimationFrame(frame);
-    }, releaseAt);
+    function throwPlane() {
+      reset();
+      root.hidden = false;
 
-    /* 3. Hand slowly withdraws back up out of view */
-    setTimeout(function () {
+      /* 1. Hand reaches down from the top-left, cocks back, then slowly swings forward */
+      var windup = 2600, releaseAt = 1870;
       hand.animate([
-        { transform: 'translate(5%, 5%) rotate(-14deg)', opacity: 1 },
-        { transform: 'translate(-60%, -60%) rotate(8deg)', opacity: 0 }
-      ], { duration: 1200, easing: 'ease-in', fill: 'forwards' });
-    }, windup + 900);
+        { transform: 'translate(-55%, -55%) rotate(22deg)', opacity: 0 },
+        { transform: 'translate(0, 0) rotate(16deg)', opacity: 1, offset: .38 },
+        { transform: 'translate(1%, 1%) rotate(26deg)', opacity: 1, offset: .58 },
+        { transform: 'translate(5%, 5%) rotate(-16deg)', opacity: 1, offset: .76 },
+        { transform: 'translate(5%, 5%) rotate(-14deg)', opacity: 1 }
+      ], { duration: windup, easing: 'cubic-bezier(.3,.6,.3,1)', fill: 'forwards' });
+
+      /* 2. Let go: the plane leaves the fingertips and flies across the page */
+      later(function () {
+        var box = held.getBoundingClientRect();
+        var x0 = box.left + box.width / 2, y0 = box.top + box.height / 2;
+        held.setAttribute('visibility', 'hidden');
+        var w = window.innerWidth, h = window.innerHeight;
+        /* Glide down and across, dip, then float up and off the right edge */
+        path.setAttribute('d',
+          'M ' + x0 + ' ' + y0 +
+          ' C ' + (w * .3) + ' ' + (y0 + h * .05) + ', ' + (w * .4) + ' ' + (h * .55) + ', ' + (w * .55) + ' ' + (h * .48) +
+          ' S ' + (w * .8) + ' ' + (h * .15) + ', ' + (w + 140) + ' ' + (h * .3));
+        var L = path.getTotalLength();
+        var dur = Math.min(7000, Math.max(5000, L * 3));
+        var scale = w < 600 ? 1 : 1.35;
+        var pts = [];
+        var start = performance.now();
+        fly.setAttribute('visibility', 'visible');
+        function frame(now) {
+          var t = Math.min(1, (now - start) / dur);
+          var e = 1 - Math.pow(1 - t, 1.4);
+          var s = e * L;
+          var p = path.getPointAtLength(s);
+          var q = path.getPointAtLength(Math.min(L, s + 2));
+          var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI + Math.sin(t * 9) * 5 * (1 - t);
+          /* Flipped like the hand, so the plane matches the one that was in its fingers */
+          fly.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + ang + ') scale(' + scale + ' ' + (-scale) + ')');
+          pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
+          trail.setAttribute('d', 'M ' + pts.join(' L '));
+          if (t < 1) raf = requestAnimationFrame(frame);
+          else {
+            trail.style.opacity = '0';
+            later(function () { root.hidden = true; }, 1300);
+          }
+        }
+        raf = requestAnimationFrame(frame);
+      }, releaseAt);
+
+      /* 3. Hand slowly withdraws back up out of view */
+      later(function () {
+        hand.animate([
+          { transform: 'translate(5%, 5%) rotate(-14deg)', opacity: 1 },
+          { transform: 'translate(-60%, -60%) rotate(8deg)', opacity: 0 }
+        ], { duration: 1200, easing: 'ease-in', fill: 'forwards' });
+      }, windup + 900);
+    }
+
+    /* The "throw" button replays it any time, even with reduced motion (it's an explicit request) */
+    btn.addEventListener('click', throwPlane);
+
+    /* Automatic throw: once per visit, skipped for reduced motion; ?throw forces it */
+    var replay = /[?&]throw\b/.test(location.search);
+    if (!replay && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    try {
+      if (!replay && sessionStorage.getItem('plane-thrown')) return;
+      sessionStorage.setItem('plane-thrown', '1');
+    } catch (e) {}
+    throwPlane();
   })();
 </script>
 </body>
