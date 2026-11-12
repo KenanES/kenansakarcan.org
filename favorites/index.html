@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../pages.css">
 </head>
 <body>
-<main class="page wide">
+<main class="page">
   <header>
     <a class="back" href="../">&larr; Kenan Sakarcan</a>
     <h1>Favorites</h1>
@@ -26,54 +26,24 @@
       <button type="button" class="chip" data-filter="desk" aria-pressed="false">Desk<span class="count">2</span></button>
     </div>
 
-    <div class="grid" id="grid">
-      <a class="card" data-cat="kitchen" href="https://www.seattlecoffeegear.com/products/moccamaster-kbgv-select-coffee-maker?variant=53295195357491" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Moccamaster</span></div>
-        <div class="card-body"><span class="name">KBGV Select coffee maker</span><span class="meta">Seattle Coffee Gear</span></div>
-      </a>
-      <a class="card" data-cat="kitchen" href="https://cairnspring.com/products/trailblazer-bread-flour" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Cairnspring Mills</span></div>
-        <div class="card-body"><span class="name">Trailblazer bread flour</span><span class="meta">Cairnspring Mills</span></div>
-      </a>
-      <a class="card" data-cat="kitchen" href="https://www.amazon.com/dp/B091BNR2WJ" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Zulay Kitchen</span></div>
-        <div class="card-body"><span class="name">Stainless fish turner</span><span class="meta">Amazon</span></div>
-      </a>
-      <a class="card" data-cat="cycling" href="https://fairlightcycles.com/strael-4-0/" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Fairlight</span></div>
-        <div class="card-body"><span class="name">Strael 4.0</span><span class="meta">Fairlight Cycles</span></div>
-      </a>
-      <a class="card" data-cat="cycling" href="https://www.albioncycling.com/products/mens-traverse-jersey-burnt-ochre_" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Albion</span></div>
-        <div class="card-body"><span class="name">Traverse jersey, burnt ochre</span><span class="meta">Albion Cycling</span></div>
-      </a>
-      <a class="card" data-cat="everyday" href="https://www.woodcraft.com/products/opinel-no-6-stainless-steel-folding-pocketknife?variant=43403563991178" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Opinel</span></div>
-        <div class="card-body"><span class="name">No. 6 stainless folding knife</span><span class="meta">Woodcraft</span></div>
-      </a>
-      <a class="card" data-cat="everyday" href="https://www.filson.com/products/24-hour-tin-cloth-briefcase-dark-tan-2" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Filson</span></div>
-        <div class="card-body"><span class="name">24-Hour Tin Cloth briefcase</span><span class="meta">Filson</span></div>
-      </a>
-      <a class="card" data-cat="everyday" href="https://darntough.com/products/mens-merino-wool-ridge-runner-micro-crew-no-cushion-ultra-lightweight-running-socks?variant=44451176251578" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Darn Tough</span></div>
-        <div class="card-body"><span class="name">Ridge Runner merino running socks</span><span class="meta">Darn Tough</span></div>
-      </a>
-      <a class="card" data-cat="desk" href="https://www.muji.us/products/gel-ink-ballpoint-pen-knock-type-blue-black-10-pack-9a63007" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">Muji</span></div>
-        <div class="card-body"><span class="name">Gel ink pens, blue-black</span><span class="meta">Muji</span></div>
-      </a>
-      <a class="card" data-cat="desk" href="https://justgetflux.com/" target="_blank" rel="noopener">
-        <div class="tile"><span class="mark">f.lux</span></div>
-        <div class="card-body"><span class="name">Warmer screen color at night</span><span class="meta">justgetflux.com</span></div>
-      </a>
+    <div class="list" id="list">
+      <a class="item" data-cat="kitchen" href="https://www.seattlecoffeegear.com/products/moccamaster-kbgv-select-coffee-maker?variant=53295195357491" target="_blank" rel="noopener"><span class="title">Moccamaster KBGV Select coffee maker</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="kitchen" href="https://cairnspring.com/products/trailblazer-bread-flour" target="_blank" rel="noopener"><span class="title">Cairnspring Mills Trailblazer bread flour</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="kitchen" href="https://www.amazon.com/dp/B091BNR2WJ" target="_blank" rel="noopener"><span class="title">Zulay stainless fish turner</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="cycling" href="https://fairlightcycles.com/strael-4-0/" target="_blank" rel="noopener"><span class="title">Fairlight Strael 4.0</span><span class="meta">Cycling</span></a>
+      <a class="item" data-cat="cycling" href="https://www.albioncycling.com/products/mens-traverse-jersey-burnt-ochre_" target="_blank" rel="noopener"><span class="title">Albion Traverse jersey, burnt ochre</span><span class="meta">Cycling</span></a>
+      <a class="item" data-cat="everyday" href="https://www.woodcraft.com/products/opinel-no-6-stainless-steel-folding-pocketknife?variant=43403563991178" target="_blank" rel="noopener"><span class="title">Opinel No. 6 stainless folding knife</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="everyday" href="https://www.filson.com/products/24-hour-tin-cloth-briefcase-dark-tan-2" target="_blank" rel="noopener"><span class="title">Filson 24-Hour Tin Cloth briefcase</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="everyday" href="https://darntough.com/products/mens-merino-wool-ridge-runner-micro-crew-no-cushion-ultra-lightweight-running-socks?variant=44451176251578" target="_blank" rel="noopener"><span class="title">Darn Tough Ridge Runner socks</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="desk" href="https://www.muji.us/products/gel-ink-ballpoint-pen-knock-type-blue-black-10-pack-9a63007" target="_blank" rel="noopener"><span class="title">Muji gel ink pens, blue-black</span><span class="meta">Desk</span></a>
+      <a class="item" data-cat="desk" href="https://justgetflux.com/" target="_blank" rel="noopener"><span class="title">f.lux, warmer screen color at night</span><span class="meta">Desk</span></a>
     </div>
   </section>
 </main>
 <script>
   (function () {
     var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
-    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.item'));
     var names = chips.map(function (c) { return c.getAttribute('data-filter'); });
     function apply(cat) {
       if (names.indexOf(cat) < 0) cat = 'all';

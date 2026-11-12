@@ -65,12 +65,10 @@ a.row:hover .title { color: var(--muted); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-/* ---------- Favorites gallery ---------- */
-:root { --tile: #F3F3F1; --tile-hover: #ECECEA; --chip: #F1F1EF; }
-@media (prefers-color-scheme: dark) { :root { --tile: #1A1A1A; --tile-hover: #222222; --chip: #1C1C1C; } }
+/* ---------- Favorites list ---------- */
+:root { --chip: #F1F1EF; }
+@media (prefers-color-scheme: dark) { :root { --chip: #1C1C1C; } }
 
-.page.wide { max-width: calc(760px + 32px); }
-.page.wide > header { max-width: 432px; }
 
 .filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
 .chip {
@@ -83,17 +81,12 @@ a.row:hover .title { color: var(--muted); }
 .chip[aria-pressed="true"] { color: var(--fg); background: var(--chip); border-color: var(--chip); }
 .chip:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 12px; }
-.card { display: grid; gap: 8px; min-width: 0; align-content: start; }
-.card[hidden] { display: none; }
-.tile {
-  aspect-ratio: 4 / 3; max-width: 100%; border-radius: 6px; background: var(--tile);
-  display: grid; place-items: center; padding: 12px; text-align: center;
-  transition: background .15s;
+/* One item per line, single spaced, hairline between items */
+.list { display: grid; }
+.item {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: baseline;
+  padding: 3px 0; border-bottom: 1px solid var(--line);
 }
-.tile .mark { font-size: 17px; line-height: 22px; font-weight: 560; letter-spacing: -0.3px; text-wrap: balance; }
-.card:hover .tile { background: var(--tile-hover); }
-.card-body { display: grid; min-width: 0; }
-.card-body .name { overflow-wrap: anywhere; }
-.card-body .meta { color: var(--muted); }
-.card:hover .name { color: var(--muted); }
+.item[hidden] { display: none; }
+.item .meta { color: var(--muted); }
+.item:hover .title { color: var(--muted); }
