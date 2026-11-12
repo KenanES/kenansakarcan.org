@@ -65,18 +65,13 @@ a:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radi
 
 /* Header */
 header { display: flex; align-items: center; gap: 12px; }
-.avatar {
-  width: 40px; height: 40px; border-radius: 50%; flex: none;
-  background: var(--ph); color: var(--muted);
-  display: grid; place-items: center; font-size: 12px; overflow: hidden;
-}
 header { flex-wrap: wrap; }
 .clock {
   margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .clock svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-@media (max-width: 400px) { .clock { margin-left: 52px; } }
+@media (max-width: 400px) { .clock { margin-left: 0; } }
 .name-line { display: flex; align-items: center; gap: 2px; }
 .throw-btn {
   display: inline-grid; place-items: center; width: 22px; height: 22px; margin: -1px 0;
@@ -92,7 +87,6 @@ header { flex-wrap: wrap; }
 .ico svg.wide { width: 22px; height: 12px; }
 .ico .solid { fill: currentColor; }
 .ico .line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .prose { display: grid; gap: 12px; }
 
 /* Section label + rows */
@@ -146,7 +140,6 @@ a.row:hover .title { color: var(--muted); }
 
 <main class="page">
   <header>
-    <div class="avatar"><img src="photos/portrait.jpg" width="240" height="240" alt="Kenan Sakarcan ski touring"></div>
     <div>
       <div class="name-line">Kenan Sakarcan<button type="button" class="throw-btn" id="throw-btn" aria-label="Throw a paper airplane" title="Throw a paper airplane"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 7.2 14.5 2 11 14 7.6 9.4z"/><path d="M14.5 2 7.6 9.4 7 13l2.3-2.3"/></svg></button></div>
       <div class="muted">Updated Nov 11, 2026</div>
