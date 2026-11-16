@@ -90,3 +90,17 @@ a.row:hover .title { color: var(--muted); }
 .item[hidden] { display: none; }
 .item .meta { color: var(--muted); }
 .item:hover .title { color: var(--muted); }
+
+/* ---------- Investment pitch pages ---------- */
+.pitch { display: grid; gap: 24px; }
+.pitch section { display: grid; gap: 8px; }
+.pitch h2 { font-size: 14px; font-weight: 600; margin: 0; }
+.pitch p { margin: 0; }
+.pitch em { font-style: normal; color: var(--muted); }
+.pitch-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.pitch-table th { color: var(--muted); font-weight: 460; text-align: left; padding: 0 12px 6px 0; vertical-align: bottom; }
+.pitch-table td { padding: 6px 12px 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.pitch-table th:last-child, .pitch-table td:last-child { padding-right: 0; }
+.pitch-table .num { text-align: right; white-space: nowrap; }
+.disclaimer { color: var(--muted); }
+.pitch-table tbody th { color: var(--fg); padding: 6px 12px 6px 0; border-top: 1px solid var(--line); vertical-align: top; text-align: left; }
