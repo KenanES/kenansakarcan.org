@@ -264,171 +264,111 @@ a.row:hover .title { color: var(--muted); }
     })();
   </script>
 </main>
-<!-- Paper airplane welcome: a sketched hand throws a plane across the page once per visit -->
+<!-- Paper airplane welcome: Kenan's pencil-drawn arm throws a paper plane across the page once per visit -->
 <style>
   .throw { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .throw-sky { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .throw-hand {
-    position: absolute; left: 0; top: clamp(90px, 17vh, 200px);
-    width: clamp(150px, 19vw, 240px); height: auto; overflow: visible;
-    opacity: 0;
+  /* The arm swings from the shoulder (bottom-left of the drawing) */
+  .throw-arm {
+    position: absolute; left: clamp(-90px, -4vw, -16px); top: clamp(110px, 19vh, 220px);
+    width: clamp(270px, 30vw, 420px); aspect-ratio: 717 / 413;
+    transform-origin: 10% 96%; opacity: 0;
   }
-  .ink { fill: none; stroke: var(--fg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-  .paper { fill: var(--bg); }
-  .ghost { opacity: .32; }
-  .hatch { fill: none; stroke: var(--fg); stroke-width: 1; stroke-linecap: round; opacity: .55; }
-  .trail { fill: none; stroke: var(--fg); stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 2 7; opacity: .45; transition: opacity .6s ease; }
-  .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: throw-draw .55s ease-out forwards; }
-  @keyframes throw-draw { to { stroke-dashoffset: 0; } }
+  .throw-arm .arm-img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* Plane held at the fingertips until release; tail sits at the index fingertip */
+  .throw-arm .held-plane { position: absolute; left: 96.9%; top: -12.6%; width: 31.2%; height: auto; transform-origin: 5% 57%; }
+  .trail { fill: none; stroke: var(--fg); stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 2 7; opacity: .4; transition: opacity .6s ease; }
+  @media (prefers-color-scheme: dark) {
+    .throw-arm img, #plane-fly image { filter: invert(1) brightness(.92); }
+  }
 </style>
 <div class="throw" id="throw" hidden aria-hidden="true">
   <svg class="throw-sky" id="throw-sky">
-    <defs>
-      <filter id="sketchy" x="-10%" y="-10%" width="120%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/>
-        <feDisplacementMap in="SourceGraphic" scale="2.6"/>
-      </filter>
-      <g id="plane-art">
-        <path class="ink paper" d="M -24 -3 L 26 0 L -24 9 L -13 2 Z"/>
-        <path class="ink paper" d="M -24 -3 L -8 -13 L 26 0 Z"/>
-        <path class="ink" d="M -13 2 L 26 0"/>
-      </g>
-    </defs>
-    <path class="measure" id="throw-path" d="" fill="none" stroke="none"/>
+    <path id="throw-path" d="" fill="none" stroke="none"/>
     <path class="trail" id="throw-trail" d=""/>
-    <g id="plane-fly" filter="url(#sketchy)" visibility="hidden">
-      <use href="#plane-art"/>
-      <use href="#plane-art" class="ghost" transform="translate(1.1 .8)"/>
-    </g>
+    <g id="plane-fly" visibility="hidden"><image id="plane-fly-img" href="photos/throw-plane.webp" width="224" height="108"/></g>
   </svg>
-  <svg class="throw-hand" id="throw-hand" viewBox="-60 -42 175 92">
-    <g filter="url(#sketchy)">
-      <!-- Forearm comes in level from the left; the hand pivots at the wrist (0, 11) -->
-      <g id="throw-arm">
-        <!-- rolled sleeve at the screen edge -->
-        <path class="ink draw" pathLength="1" d="M -58 -9.5 L -320 -13 M -58 32.5 L -320 36"/>
-        <path class="ink paper draw" pathLength="1" d="M -58 -9.5 L -50 -9 C -46 4 -46 20 -50 32 L -58 32.5 C -54 20 -54 4 -58 -9.5 Z"/>
-        <!-- forearm tapering to the wrist, with the wrist bone bump on top -->
-        <path class="ink draw" pathLength="1" d="M -49 -6 C -37 -4.6 -26 -2.6 -16 -1 C -10 -2.6 -5 -2.4 0 -.5"/>
-        <path class="ink draw" pathLength="1" d="M -49 28.5 C -37 27.4 -26 25.2 -16 23 L 0 22.5"/>
-        <path class="hatch draw" pathLength="1" d="M -41 23.4 L -38 27.8 M -34 22.6 L -31 26.8 M -27 21.8 L -24 25.6"/>
-        <g id="throw-wrist">
-          <!-- back of hand, extended index finger with two joints, curled fingers, heel of palm -->
-          <path class="ink paper draw" pathLength="1" d="M 0 -.5 C 8 -3.5 18 -5.5 28 -5.5 C 34 -5.5 38 -4.2 44 -3 C 47 -2.6 50 -1.8 53 -.6 C 56 .6 59 2.4 60 4.4 C 60.6 6.4 58.8 7.6 56.8 7.2 C 53 6.6 48 6.4 43 7 C 41.5 9 41.5 13 38.5 14.5 C 39.5 16.5 39 20 35 21 C 34.5 23.5 31.5 25 27.5 24.5 C 20 24.2 10 23.6 0 22.5"/>
-          <path class="hatch draw" pathLength="1" d="M 8 2 C 16 0 22 -1.4 28 -2.4 M 44 -2.4 C 44.5 -.6 44.4 1.6 43.8 3.4 M 53 -.2 C 53.4 1.2 53.3 2.8 52.8 4 M 2 18.6 C 4 20 4.2 21.6 3.2 22.8"/>
-          <path class="ink draw" pathLength="1" d="M 56.2 1 C 58 1.9 59.1 3.2 59.4 4.6"/>
-          <g id="plane-held" transform="translate(74 4) rotate(-8)">
-            <use href="#plane-art"/>
-          </g>
-          <!-- thumb in front, pinching the plane against the index finger -->
-          <path class="ink paper draw" pathLength="1" d="M 10 14 C 18 13.5 28 11.5 36 9.5 C 42 8 47 6.8 51 6.4 C 53.6 6.2 54.4 8.6 52.4 9.8 C 47 11.4 40 13.4 33 15.6 C 26 17.6 18 19.6 10 20"/>
-          <path class="ink draw" pathLength="1" d="M 48.4 7 C 50.4 6.7 51.9 7.1 52.5 8.1"/>
-          <path class="hatch draw" pathLength="1" d="M 38 9.4 C 38.6 10.8 38.6 12.4 38 13.8"/>
-        </g>
-      </g>
-      <use href="#throw-arm" class="ghost" transform="translate(1.3 .9)"/>
-    </g>
-  </svg>
+  <div class="throw-arm" id="throw-hand">
+    <img class="arm-img" src="photos/throw-arm.webp" width="717" height="413" alt="">
+    <img class="held-plane" id="plane-held" src="photos/throw-plane.webp" width="224" height="108" alt="">
+  </div>
 </div>
 <script>
   (function () {
     var root = document.getElementById('throw');
-    var hand = document.getElementById('throw-hand');
+    var arm = document.getElementById('throw-hand');
     var held = document.getElementById('plane-held');
     var fly = document.getElementById('plane-fly');
+    var flyImg = document.getElementById('plane-fly-img');
     var path = document.getElementById('throw-path');
     var trail = document.getElementById('throw-trail');
     var btn = document.getElementById('throw-btn');
-    if (!root || !hand.animate || !path.getPointAtLength) { if (btn) btn.hidden = true; return; }
+    if (!root || !arm.animate || !path.getPointAtLength) { if (btn) btn.hidden = true; return; }
     var busy = false;
+    var PLANE_TILT = -17;   /* the drawn plane points 17 degrees up; rotate it level before steering */
 
     function throwPlane() {
-    if (busy) return;
-    busy = true;
-    /* reset from any earlier throw */
-    held.removeAttribute('visibility');
-    fly.setAttribute('visibility', 'hidden');
-    trail.setAttribute('d', '');
-    trail.style.opacity = '';
-    Array.prototype.forEach.call(hand.querySelectorAll('.draw'), function (el) {
-      el.classList.remove('draw'); void el.getBoundingClientRect(); el.classList.add('draw');
-    });
-    root.hidden = false;
+      if (busy) return;
+      busy = true;
+      arm.getAnimations().forEach(function (a) { a.cancel(); });
+      held.style.visibility = '';
+      fly.setAttribute('visibility', 'hidden');
+      trail.setAttribute('d', '');
+      trail.style.opacity = '';
+      root.hidden = false;
 
-    /* 1. Arm reaches in, wrist cocks back, then flicks forward and follows through.
-          x = forearm slide (svg units), a = wrist angle (negative tips the hand up and back) */
-    var K = [
-      { t: 0,    x: -150, a: 6 },
-      { t: 420,  x: 0,    a: 0,   e: 'out' },
-      { t: 650,  x: -6,   a: -32, e: 'inout' },
-      { t: 770,  x: 7,    a: 24,  e: 'in' },
-      { t: 920,  x: 5,    a: 15,  e: 'out' },
-      { t: 1300, x: 5,    a: 15 },
-      { t: 1950, x: -170, a: 4,   e: 'in' }
-    ];
-    var releaseAt = 725, endAt = 1950, released = false;
-    var arm = document.getElementById('throw-arm'), wrist = document.getElementById('throw-wrist');
-    function ease(k, u) {
-      if (k === 'in') return u * u * u;
-      if (k === 'out') return 1 - Math.pow(1 - u, 3);
-      if (k === 'inout') return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
-      return u;
-    }
-    function pose(ms) {
-      for (var i = 1; i < K.length; i++) {
-        if (ms <= K[i].t) {
-          var u = ease(K[i].e, (ms - K[i - 1].t) / (K[i].t - K[i - 1].t));
-          return { x: K[i - 1].x + (K[i].x - K[i - 1].x) * u, a: K[i - 1].a + (K[i].a - K[i - 1].a) * u };
+      /* 1. The arm rises in low and cocked, winds back a touch, then whips up and forward */
+      var swing = 1150, releaseAt = 860;
+      arm.animate([
+        { transform: 'translate(-30%, 28%) rotate(16deg)', opacity: 0 },
+        { transform: 'translate(0, 0) rotate(13deg)', opacity: 1, offset: .36 },
+        { transform: 'translate(-1%, 1%) rotate(17deg)', opacity: 1, offset: .58, easing: 'cubic-bezier(.55,0,.9,.4)' },
+        { transform: 'translate(1%, -1%) rotate(-4deg)', opacity: 1, offset: .8, easing: 'cubic-bezier(.2,.7,.3,1)' },
+        { transform: 'translate(1%, -1%) rotate(-2deg)', opacity: 1 }
+      ], { duration: swing, easing: 'cubic-bezier(.25,.7,.35,1)', fill: 'forwards' });
+
+      /* 2. Let go: the plane leaves the fingertips and flies across the page */
+      setTimeout(function () {
+        var box = held.getBoundingClientRect();
+        var k = held.offsetWidth / 224;
+        var x0 = box.left + box.width / 2, y0 = box.top + box.height / 2;
+        held.style.visibility = 'hidden';
+        flyImg.setAttribute('x', -112); flyImg.setAttribute('y', -54);
+        var w = window.innerWidth, h = window.innerHeight;
+        path.setAttribute('d',
+          'M ' + x0 + ' ' + y0 +
+          ' C ' + (x0 + w * .16) + ' ' + Math.max(16, y0 - h * .16) + ', ' + (w * .45) + ' ' + Math.max(16, y0 - h * .04) + ', ' + (w * .6) + ' ' + (y0 + h * .06) +
+          ' S ' + (w * .86) + ' ' + (y0 + h * .14) + ', ' + (w + 160) + ' ' + Math.max(20, y0 - h * .1));
+        var L = path.getTotalLength();
+        var dur = Math.min(3200, Math.max(2200, L * 1.5));
+        var pts = [], start = performance.now();
+        fly.setAttribute('visibility', 'visible');
+        function frame(now) {
+          var t = Math.min(1, (now - start) / dur);
+          var e = 1 - Math.pow(1 - t, 1.7);
+          var s = e * L;
+          var p = path.getPointAtLength(s), q = path.getPointAtLength(Math.min(L, s + 2));
+          var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI - PLANE_TILT + Math.sin(t * 14) * 4 * (1 - t);
+          var sc = k * (1 - .25 * t);
+          fly.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + ang + ') scale(' + sc + ')');
+          pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
+          trail.setAttribute('d', 'M ' + pts.join(' L '));
+          if (t < 1) requestAnimationFrame(frame);
+          else {
+            trail.style.opacity = '0';
+            setTimeout(function () { root.hidden = true; busy = false; }, 700);
+          }
         }
-      }
-      return K[K.length - 1];
-    }
-    var t0 = performance.now();
-    function move(now) {
-      var ms = now - t0, p = pose(ms);
-      arm.setAttribute('transform', 'translate(' + p.x.toFixed(2) + ' 0)');
-      wrist.setAttribute('transform', 'rotate(' + p.a.toFixed(2) + ' 0 11)');
-      hand.style.opacity = String(Math.min(1, ms / 180) * (ms > endAt - 300 ? Math.max(0, (endAt - ms) / 300) : 1));
-      if (!released && ms >= releaseAt) { released = true; launch(); }
-      if (ms < endAt) requestAnimationFrame(move);
-    }
-    requestAnimationFrame(move);
+        requestAnimationFrame(frame);
+      }, releaseAt);
 
-    /* 2. Let go: the plane leaves the fingertips and flies across the page */
-    function launch() {
-      var box = held.getBoundingClientRect();
-      var x0 = box.left + box.width / 2, y0 = box.top + box.height / 2;
-      held.setAttribute('visibility', 'hidden');
-      var w = window.innerWidth, h = window.innerHeight;
-      path.setAttribute('d',
-        'M ' + x0 + ' ' + y0 +
-        ' C ' + (x0 + w * .2) + ' ' + Math.max(16, y0 - h * .14) + ', ' + (w * .4) + ' ' + (y0 + h * .02) + ', ' + (w * .55) + ' ' + (y0 + h * .1) +
-        ' S ' + (w * .82) + ' ' + (y0 + h * .24) + ', ' + (w + 140) + ' ' + Math.max(20, y0 - h * .08));
-      var L = path.getTotalLength();
-      var dur = Math.min(3200, Math.max(2200, L * 1.6));
-      var scale = w < 600 ? 1 : 1.35;
-      var pts = [];
-      var start = performance.now();
-      fly.setAttribute('visibility', 'visible');
-      function frame(now) {
-        var t = Math.min(1, (now - start) / dur);
-        var e = 1 - Math.pow(1 - t, 1.7);
-        var s = e * L;
-        var p = path.getPointAtLength(s);
-        var q = path.getPointAtLength(Math.min(L, s + 2));
-        var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI + Math.sin(t * 14) * 4 * (1 - t);
-        fly.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + ang + ') scale(' + scale + ')');
-        pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
-        trail.setAttribute('d', 'M ' + pts.join(' L '));
-        if (t < 1) requestAnimationFrame(frame);
-        else {
-          trail.style.opacity = '0';
-          setTimeout(function () { root.hidden = true; busy = false; }, 700);
-        }
-      }
-      requestAnimationFrame(frame);
-    }
-
+      /* 3. After a short follow-through the arm drops back out of view */
+      setTimeout(function () {
+        arm.animate([
+          { transform: 'translate(1%, -1%) rotate(-2deg)', opacity: 1 },
+          { transform: 'translate(-34%, 32%) rotate(14deg)', opacity: 0 }
+        ], { duration: 700, easing: 'ease-in', fill: 'forwards' });
+      }, swing + 350);
     }
 
     /* The paper plane button throws again any time */
