@@ -264,7 +264,7 @@ a.row:hover .title { color: var(--muted); }
     })();
   </script>
 </main>
-<!-- Paper airplane welcome: Kenan's pencil-drawn plane glides down from the top left once per visit -->
+<!-- Paper airplane welcome: Kenan's pencil-drawn plane floats across the top of the page once per visit -->
 <style>
   .throw { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .throw-sky { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -296,27 +296,27 @@ a.row:hover .title { color: var(--muted); }
       trail.style.opacity = '';
       root.hidden = false;
       var w = window.innerWidth, h = window.innerHeight;
-      /* Enter just off the top-left corner, then drift down and across in long, shallow swoops */
-      path.setAttribute('d',
-        'M -90 ' + (-h * .02) +
-        ' C ' + (w * .18) + ' ' + (h * .06) + ', ' + (w * .26) + ' ' + (h * .3) + ', ' + (w * .44) + ' ' + (h * .32) +
-        ' S ' + (w * .7) + ' ' + (h * .44) + ', ' + (w * .8) + ' ' + (h * .56) +
-        ' S ' + (w + 40) + ' ' + (h * .66) + ', ' + (w + 180) + ' ' + (h * .7));
-      var L = path.getTotalLength();
-      var dur = Math.min(7500, Math.max(5200, L * 3.2));
-      var k = Math.min(130, Math.max(84, w * .1)) / 224;
+      /* Float only in the top band of the page: the top eighth, and never lower than just above the name */
+      var name = document.querySelector('.name-line');
+      var k = Math.min(60, Math.max(46, w * .042)) / 224;      /* plane drawn about 46-60px wide */
+      var half = 108 * k / 2 * 1.15;                           /* half its height, allowing for tilt */
+      var limit = Math.min(h / 8, name ? name.getBoundingClientRect().top - 8 : h / 8);
+      var ceil = half + 4, floor = Math.max(ceil, limit - half);
+      var mid = (ceil + floor) / 2, amp = (floor - ceil) / 2 / 1.35;
+      var x0 = -110, x1 = w + 110;
+      var dur = Math.min(11000, Math.max(6500, (x1 - x0) / 150 * 1000));   /* a slow drift, about 150px a second */
       var pts = [], start = performance.now();
+      function at(u) {
+        return { x: x0 + (x1 - x0) * u, y: mid + amp * Math.sin(u * Math.PI * 2 * 1.6 + .6) + amp * .35 * Math.sin(u * Math.PI * 2 * 4.3) };
+      }
       fly.setAttribute('visibility', 'visible');
       function frame(now) {
         var t = Math.min(1, (now - start) / dur);
-        var e = t < .5 ? 2 * t * t * (1.5 - t) : t;          /* eases in from the corner, then glides at an even pace */
-        e = .4 * t + .6 * e;
-        var s = e * L;
-        var p = path.getPointAtLength(s), q = path.getPointAtLength(Math.min(L, s + 2));
-        var bob = Math.sin(t * Math.PI * 5) * 3;
-        var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI - PLANE_TILT + Math.sin(t * Math.PI * 4) * 3;
-        fly.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y + bob).toFixed(1) + ') rotate(' + ang.toFixed(2) + ') scale(' + k.toFixed(3) + ')');
-        pts.push(p.x.toFixed(1) + ' ' + (p.y + bob).toFixed(1));
+        var p = at(t), q = at(Math.min(1, t + .002));
+        var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI * .8 - PLANE_TILT;
+        fly.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + ang.toFixed(2) + ') scale(' + k.toFixed(3) + ')');
+        pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
+        if (pts.length > 140) pts.shift();                    /* a short trail that follows the plane */
         trail.setAttribute('d', 'M ' + pts.join(' L '));
         if (t < 1) requestAnimationFrame(frame);
         else {
