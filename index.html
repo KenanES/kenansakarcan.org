@@ -264,117 +264,74 @@ a.row:hover .title { color: var(--muted); }
     })();
   </script>
 </main>
-<!-- Paper airplane welcome: Kenan's pencil-drawn arm throws a paper plane across the page once per visit -->
+<!-- Paper airplane welcome: Kenan's pencil-drawn plane glides down from the top left once per visit -->
 <style>
   .throw { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
   .throw-sky { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  /* The arm swings from the shoulder (bottom-left of the drawing) */
-  .throw-arm {
-    position: absolute; left: clamp(-90px, -4vw, -16px); top: clamp(110px, 19vh, 220px);
-    width: clamp(270px, 30vw, 420px); aspect-ratio: 717 / 413;
-    transform-origin: 10% 96%; opacity: 0;
-  }
-  .throw-arm .arm-img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  /* Plane held at the fingertips until release; tail sits at the index fingertip */
-  .throw-arm .held-plane { position: absolute; left: 96.9%; top: -12.6%; width: 31.2%; height: auto; transform-origin: 5% 57%; }
-  .trail { fill: none; stroke: var(--fg); stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 2 7; opacity: .4; transition: opacity .6s ease; }
-  @media (prefers-color-scheme: dark) {
-    .throw-arm img, #plane-fly image { filter: invert(1) brightness(.92); }
-  }
+  .trail { fill: none; stroke: var(--fg); stroke-width: 1.2; stroke-linecap: round; stroke-dasharray: 2 8; opacity: .3; transition: opacity .8s ease; }
+  @media (prefers-color-scheme: dark) { #plane-fly image { filter: invert(1) brightness(.92); } }
 </style>
 <div class="throw" id="throw" hidden aria-hidden="true">
   <svg class="throw-sky" id="throw-sky">
     <path id="throw-path" d="" fill="none" stroke="none"/>
     <path class="trail" id="throw-trail" d=""/>
-    <g id="plane-fly" visibility="hidden"><image id="plane-fly-img" href="photos/throw-plane.webp" width="224" height="108"/></g>
+    <g id="plane-fly" visibility="hidden"><image href="photos/throw-plane.webp" x="-112" y="-54" width="224" height="108"/></g>
   </svg>
-  <div class="throw-arm" id="throw-hand">
-    <img class="arm-img" src="photos/throw-arm.webp" width="717" height="413" alt="">
-    <img class="held-plane" id="plane-held" src="photos/throw-plane.webp" width="224" height="108" alt="">
-  </div>
 </div>
 <script>
   (function () {
     var root = document.getElementById('throw');
-    var arm = document.getElementById('throw-hand');
-    var held = document.getElementById('plane-held');
     var fly = document.getElementById('plane-fly');
-    var flyImg = document.getElementById('plane-fly-img');
     var path = document.getElementById('throw-path');
     var trail = document.getElementById('throw-trail');
     var btn = document.getElementById('throw-btn');
-    if (!root || !arm.animate || !path.getPointAtLength) { if (btn) btn.hidden = true; return; }
+    if (!root || !path.getPointAtLength) { if (btn) btn.hidden = true; return; }
     var busy = false;
     var PLANE_TILT = -17;   /* the drawn plane points 17 degrees up; rotate it level before steering */
 
     function throwPlane() {
       if (busy) return;
       busy = true;
-      arm.getAnimations().forEach(function (a) { a.cancel(); });
-      held.style.visibility = '';
-      fly.setAttribute('visibility', 'hidden');
       trail.setAttribute('d', '');
       trail.style.opacity = '';
       root.hidden = false;
-
-      /* 1. The arm rises in low and cocked, winds back a touch, then whips up and forward */
-      var swing = 1150, releaseAt = 860;
-      arm.animate([
-        { transform: 'translate(-30%, 28%) rotate(16deg)', opacity: 0 },
-        { transform: 'translate(0, 0) rotate(13deg)', opacity: 1, offset: .36 },
-        { transform: 'translate(-1%, 1%) rotate(17deg)', opacity: 1, offset: .58, easing: 'cubic-bezier(.55,0,.9,.4)' },
-        { transform: 'translate(1%, -1%) rotate(-4deg)', opacity: 1, offset: .8, easing: 'cubic-bezier(.2,.7,.3,1)' },
-        { transform: 'translate(1%, -1%) rotate(-2deg)', opacity: 1 }
-      ], { duration: swing, easing: 'cubic-bezier(.25,.7,.35,1)', fill: 'forwards' });
-
-      /* 2. Let go: the plane leaves the fingertips and flies across the page */
-      setTimeout(function () {
-        var box = held.getBoundingClientRect();
-        var k = held.offsetWidth / 224;
-        var x0 = box.left + box.width / 2, y0 = box.top + box.height / 2;
-        held.style.visibility = 'hidden';
-        flyImg.setAttribute('x', -112); flyImg.setAttribute('y', -54);
-        var w = window.innerWidth, h = window.innerHeight;
-        path.setAttribute('d',
-          'M ' + x0 + ' ' + y0 +
-          ' C ' + (x0 + w * .16) + ' ' + Math.max(16, y0 - h * .16) + ', ' + (w * .45) + ' ' + Math.max(16, y0 - h * .04) + ', ' + (w * .6) + ' ' + (y0 + h * .06) +
-          ' S ' + (w * .86) + ' ' + (y0 + h * .14) + ', ' + (w + 160) + ' ' + Math.max(20, y0 - h * .1));
-        var L = path.getTotalLength();
-        var dur = Math.min(3200, Math.max(2200, L * 1.5));
-        var pts = [], start = performance.now();
-        fly.setAttribute('visibility', 'visible');
-        function frame(now) {
-          var t = Math.min(1, (now - start) / dur);
-          var e = 1 - Math.pow(1 - t, 1.7);
-          var s = e * L;
-          var p = path.getPointAtLength(s), q = path.getPointAtLength(Math.min(L, s + 2));
-          var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI - PLANE_TILT + Math.sin(t * 14) * 4 * (1 - t);
-          var sc = k * (1 - .25 * t);
-          fly.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + ang + ') scale(' + sc + ')');
-          pts.push(p.x.toFixed(1) + ' ' + p.y.toFixed(1));
-          trail.setAttribute('d', 'M ' + pts.join(' L '));
-          if (t < 1) requestAnimationFrame(frame);
-          else {
-            trail.style.opacity = '0';
-            setTimeout(function () { root.hidden = true; busy = false; }, 700);
-          }
+      var w = window.innerWidth, h = window.innerHeight;
+      /* Enter just off the top-left corner, then drift down and across in long, shallow swoops */
+      path.setAttribute('d',
+        'M -90 ' + (-h * .02) +
+        ' C ' + (w * .18) + ' ' + (h * .06) + ', ' + (w * .26) + ' ' + (h * .3) + ', ' + (w * .44) + ' ' + (h * .32) +
+        ' S ' + (w * .7) + ' ' + (h * .44) + ', ' + (w * .8) + ' ' + (h * .56) +
+        ' S ' + (w + 40) + ' ' + (h * .66) + ', ' + (w + 180) + ' ' + (h * .7));
+      var L = path.getTotalLength();
+      var dur = Math.min(7500, Math.max(5200, L * 3.2));
+      var k = Math.min(130, Math.max(84, w * .1)) / 224;
+      var pts = [], start = performance.now();
+      fly.setAttribute('visibility', 'visible');
+      function frame(now) {
+        var t = Math.min(1, (now - start) / dur);
+        var e = t < .5 ? 2 * t * t * (1.5 - t) : t;          /* eases in from the corner, then glides at an even pace */
+        e = .4 * t + .6 * e;
+        var s = e * L;
+        var p = path.getPointAtLength(s), q = path.getPointAtLength(Math.min(L, s + 2));
+        var bob = Math.sin(t * Math.PI * 5) * 3;
+        var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI - PLANE_TILT + Math.sin(t * Math.PI * 4) * 3;
+        fly.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + (p.y + bob).toFixed(1) + ') rotate(' + ang.toFixed(2) + ') scale(' + k.toFixed(3) + ')');
+        pts.push(p.x.toFixed(1) + ' ' + (p.y + bob).toFixed(1));
+        trail.setAttribute('d', 'M ' + pts.join(' L '));
+        if (t < 1) requestAnimationFrame(frame);
+        else {
+          fly.setAttribute('visibility', 'hidden');
+          trail.style.opacity = '0';
+          setTimeout(function () { root.hidden = true; busy = false; }, 900);
         }
-        requestAnimationFrame(frame);
-      }, releaseAt);
-
-      /* 3. After a short follow-through the arm drops back out of view */
-      setTimeout(function () {
-        arm.animate([
-          { transform: 'translate(1%, -1%) rotate(-2deg)', opacity: 1 },
-          { transform: 'translate(-34%, 32%) rotate(14deg)', opacity: 0 }
-        ], { duration: 700, easing: 'ease-in', fill: 'forwards' });
-      }, swing + 350);
+      }
+      requestAnimationFrame(frame);
     }
 
-    /* The paper plane button throws again any time */
+    /* The paper plane button sends another one any time */
     if (btn) btn.addEventListener('click', throwPlane);
 
-    /* Automatic throw: once per visit, skipped for reduced motion unless ?throw is in the address */
+    /* Automatic flight: once per visit, skipped for reduced motion unless ?throw is in the address */
     var replay = /[?&]throw\b/.test(location.search);
     if (!replay && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     try {
