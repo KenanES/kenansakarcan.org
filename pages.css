@@ -97,6 +97,9 @@ a.row:hover .title { color: var(--muted); }
 .pitch h2 { font-size: 14px; font-weight: 600; margin: 0; }
 .pitch p { margin: 0; }
 .pitch em { font-style: normal; color: var(--muted); }
+.pitch .lede { margin: 0; }
+.pitch p a { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 2px; }
+.pitch p a:hover { color: var(--muted); }
 .pitch-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .pitch-table th { color: var(--muted); font-weight: 460; text-align: left; padding: 0 12px 6px 0; vertical-align: bottom; }
 .pitch-table td { padding: 6px 12px 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
