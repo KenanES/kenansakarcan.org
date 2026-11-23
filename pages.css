@@ -116,3 +116,13 @@ a.row:hover .title { color: var(--muted); }
 .invest-table td:last-child { color: var(--muted); }
 .invest-table a { display: block; }
 .invest-table a:hover { color: var(--muted); }
+
+/* ---------- Projects and Writing ---------- */
+.proj-table { width: 100%; border-collapse: collapse; }
+.proj-table th { color: var(--muted); font-weight: 460; text-align: left; padding: 0 16px 6px 0; }
+.proj-table td { padding: 6px 16px 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.proj-table th:last-child, .proj-table td:last-child { padding-right: 0; }
+.proj-table td:first-child { white-space: nowrap; }
+.proj-table td:last-child { color: var(--muted); }
+.proj-table a { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 2px; }
+.proj-table a:hover { color: var(--muted); }
