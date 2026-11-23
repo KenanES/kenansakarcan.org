@@ -126,3 +126,32 @@ a.row:hover .title { color: var(--muted); }
 .proj-table td:last-child { color: var(--muted); }
 .proj-table a { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 2px; }
 .proj-table a:hover { color: var(--muted); }
+
+/* ---------- Project write-ups ---------- */
+.post { display: grid; gap: 14px; }
+.post h2 { font-size: 14px; font-weight: 600; margin: 14px 0 0; }
+.post h2.doc-title { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+.post h3 { font-size: 14px; font-weight: 500; color: var(--muted); margin: 4px 0 -8px; }
+.post p, .post ul { margin: 0; }
+.post ul { padding-left: 18px; display: grid; gap: 6px; }
+.post strong { font-weight: 560; }
+.post figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.post figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+.post > figure .tall { max-height: 520px; width: auto; max-width: 100%; }
+.post figcaption { color: var(--muted); font-size: 12px; line-height: 16px; }
+.post .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+.post .pair img, .post .photo-soon { aspect-ratio: 3 / 4; object-fit: cover; }
+.post .photo-soon {
+  width: 100%; border-radius: 6px; border: 1px dashed var(--line); background: var(--chip);
+  display: grid; place-items: center; text-align: center; padding: 12px; color: var(--muted); font-size: 12px;
+}
+.post .table-wrap { overflow-x: auto; }
+.spec-table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 18px; }
+.spec-table th { color: var(--muted); font-weight: 460; text-align: left; padding: 0 10px 6px 0; vertical-align: bottom; }
+.spec-table td { padding: 6px 10px 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.spec-table th:last-child, .spec-table td:last-child { padding-right: 0; color: var(--muted); }
+.spec-table td:nth-child(2) { white-space: nowrap; }
+.post pre {
+  margin: 0; padding: 12px 14px; overflow-x: auto; border-radius: 6px; background: var(--chip);
+  font: 12px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
