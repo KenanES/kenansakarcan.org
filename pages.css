@@ -182,3 +182,18 @@ a.row:hover .title { color: var(--muted); }
   margin: 0; padding: 12px 14px; overflow-x: auto; border-radius: 6px; background: var(--chip);
   font: 12px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
+
+/* ---------- Investment returns ---------- */
+:root { --up: #1F7A4D; --down: #B4432F; }
+@media (prefers-color-scheme: dark) { :root { --up: #5CC48E; --down: #F08A73; } }
+.up { color: var(--up); }
+.down { color: var(--down); }
+.intro.since { color: var(--muted); font-variant-numeric: tabular-nums; }
+.invest-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.invest-table td:nth-child(2) { color: var(--muted); white-space: nowrap; }
+.invest-table th.num { white-space: nowrap; }
+.invest-table td.ret { color: var(--fg); }
+.invest-table td.ret.up { color: var(--up); }
+.invest-table td.ret.down { color: var(--down); }
+.invest-table th + th, .invest-table td + td { padding-left: 12px; }
+.table-note { color: var(--muted); font-size: 12px; line-height: 16px; margin: 12px 0 0; }

@@ -18,12 +18,14 @@
   </header>
 
   <table class="invest-table">
-    <thead><tr><th scope="col">Ticker</th><th scope="col">Published</th></tr></thead>
+    <thead><tr><th scope="col">Ticker</th><th scope="col">Published</th><th scope="col" class="num">At publish</th><th scope="col" class="num">Now</th><th scope="col" class="num">Return</th></tr></thead>
     <tbody>
-      <tr><td><a href="gaeasoft/">Gaeasoft (KOSDAQ: 051160)</a></td><td><time datetime="2026-11-20">Nov 20, 2026</time></td></tr>
-      <tr><td><a href="hgv/">$HGV</a></td><td><time datetime="2026-11-16">Nov 16, 2026</time></td></tr>
+      <tr data-symbol="051160.KQ" data-pub-price="14050" data-pub-fx="1334.79" data-format="row"><td><a href="gaeasoft/">Gaeasoft (KOSDAQ: 051160)</a></td><td><time datetime="2026-11-20">Nov 20, 2026</time></td><td class="num at-pub">$10.53</td><td class="num now">&ndash;</td><td class="num ret">&ndash;</td></tr>
+      <tr data-symbol="HGV" data-pub-price="45.01" data-format="row"><td><a href="hgv/">$HGV</a></td><td><time datetime="2026-11-16">Nov 16, 2026</time></td><td class="num at-pub">$45.01</td><td class="num now">&ndash;</td><td class="num ret">&ndash;</td></tr>
     </tbody>
   </table>
+  <p class="table-note">Returns are in US dollars from the closing price on the publication date, updated once a day after the market closes. Not advice on what to buy.</p>
 </main>
+<script src="returns.js" defer></script>
 </body>
 </html>
