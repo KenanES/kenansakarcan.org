@@ -1,0 +1,40 @@
+/* Dark mode: a deep olive-brown palette taken from Kenan's reference image.
+   Applies when the visitor picks dark with the switch, or when their device is in
+   dark mode and they haven't picked light. Loaded after each page's own styles. */
+:root[data-theme="dark"] {
+  --bg: #241B07; --fg: #F1EAD6; --muted: #B9AC86; --line: #4A3E22; --underline: #6E6140;
+  --ph: #3A2E12; --chip: #3E3115; --up: #8FD6A8; --down: #F29A82;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #241B07; --fg: #F1EAD6; --muted: #B9AC86; --line: #4A3E22; --underline: #6E6140;
+    --ph: #3A2E12; --chip: #3E3115; --up: #8FD6A8; --down: #F29A82;
+    color-scheme: dark;
+  }
+}
+/* The soft gradient from the image, fixed behind the page */
+:root[data-theme="dark"] body {
+  background: var(--bg) linear-gradient(115deg, #1A1303 0%, #2B1F05 38%, #3B2C06 72%, #503D0A 100%) fixed;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body {
+    background: var(--bg) linear-gradient(115deg, #1A1303 0%, #2B1F05 38%, #3B2C06 72%, #503D0A 100%) fixed;
+  }
+}
+/* Light pencil lines on the floating paper plane */
+:root[data-theme="dark"] #plane-fly image { filter: invert(1) sepia(.35) brightness(.95); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #plane-fly image { filter: invert(1) sepia(.35) brightness(.95); } }
+
+/* Light / dark switch */
+.theme-btn {
+  display: inline-grid; place-items: center; width: 22px; height: 22px; margin: -1px 0; padding: 0;
+  border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.theme-btn:hover { color: var(--fg); background: var(--ph, var(--chip)); }
+.theme-btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.theme-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+header.has-theme-btn { position: relative; }
+header.has-theme-btn > .theme-btn { position: absolute; top: 0; right: 0; }
+@media (prefers-reduced-motion: reduce) { .theme-btn { transition: none; } }

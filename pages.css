@@ -9,9 +9,6 @@
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #111111; --fg: #EDEDED; --muted: #7D7D7D; --line: #222222; color-scheme: dark; }
-}
 
 * { box-sizing: border-box; }
 body {
@@ -67,7 +64,6 @@ a.row:hover .title { color: var(--muted); }
 
 /* ---------- Favorites list ---------- */
 :root { --chip: #F1F1EF; }
-@media (prefers-color-scheme: dark) { :root { --chip: #1C1C1C; } }
 
 
 .filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
@@ -185,7 +181,6 @@ a.row:hover .title { color: var(--muted); }
 
 /* ---------- Investment returns ---------- */
 :root { --up: #1F7A4D; --down: #B4432F; }
-@media (prefers-color-scheme: dark) { :root { --up: #5CC48E; --down: #F08A73; } }
 .up { color: var(--up); }
 .down { color: var(--down); }
 .intro.since { color: var(--muted); font-variant-numeric: tabular-nums; }
