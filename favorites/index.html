@@ -11,13 +11,14 @@
 <link rel="stylesheet" href="../pages.css">
 </head>
 <body>
-<main class="page">
+<main class="page gallery">
   <header>
     <a class="back" href="../">&larr; Kenan Sakarcan</a>
     <h1>Favorites</h1>
   </header>
 
   <section aria-label="Favorite things">
+    <div class="toolbar">
     <div class="filters" role="group" aria-label="Filter by category">
       <button type="button" class="chip" data-filter="all" aria-pressed="true">All<span class="count">14</span></button>
       <button type="button" class="chip" data-filter="kitchen" aria-pressed="false">Kitchen<span class="count">4</span></button>
@@ -26,22 +27,27 @@
       <button type="button" class="chip" data-filter="desk" aria-pressed="false">Desk<span class="count">1</span></button>
       <button type="button" class="chip" data-filter="app" aria-pressed="false">App<span class="count">3</span></button>
     </div>
+    <div class="view-toggle" role="group" aria-label="Choose a view">
+      <button type="button" data-view="list" aria-pressed="false">List</button>
+      <button type="button" data-view="gallery" aria-pressed="true">Gallery</button>
+    </div>
+    </div>
 
     <div class="list" id="list">
-      <a class="item" data-cat="kitchen" href="https://www.seattlecoffeegear.com/products/moccamaster-kbgv-select-coffee-maker?variant=53295195357491" target="_blank" rel="noopener"><span class="title">Moccamaster KBGV Select coffee maker</span><span class="meta">Kitchen</span></a>
-      <a class="item" data-cat="kitchen" href="https://cairnspring.com/products/trailblazer-bread-flour" target="_blank" rel="noopener"><span class="title">Cairnspring Mills Trailblazer bread flour</span><span class="meta">Kitchen</span></a>
-      <a class="item" data-cat="kitchen" href="https://www.amazon.com/dp/B091BNR2WJ" target="_blank" rel="noopener"><span class="title">Zulay stainless fish turner</span><span class="meta">Kitchen</span></a>
-      <a class="item" data-cat="kitchen" href="https://www.jonopandolfi.com/products/8-coupe-pasta-bowl?variant=37985765621912" target="_blank" rel="noopener"><span class="title">Jono Pandolfi 8&Prime; coupe pasta bowl</span><span class="meta">Kitchen</span></a>
-      <a class="item" data-cat="cycling" href="https://fairlightcycles.com/strael-4-0/" target="_blank" rel="noopener"><span class="title">Fairlight Strael 4.0</span><span class="meta">Cycling</span></a>
-      <a class="item" data-cat="cycling" href="https://www.albioncycling.com/products/mens-traverse-jersey-burnt-ochre_" target="_blank" rel="noopener"><span class="title">Albion Traverse jersey, burnt ochre</span><span class="meta">Cycling</span></a>
-      <a class="item" data-cat="everyday" href="https://www.woodcraft.com/products/opinel-no-6-stainless-steel-folding-pocketknife?variant=43403563991178" target="_blank" rel="noopener"><span class="title">Opinel No. 6 stainless folding knife</span><span class="meta">Everyday</span></a>
-      <a class="item" data-cat="everyday" href="https://www.filson.com/products/24-hour-tin-cloth-briefcase-dark-tan-2" target="_blank" rel="noopener"><span class="title">Filson 24-Hour Tin Cloth briefcase</span><span class="meta">Everyday</span></a>
-      <a class="item" data-cat="everyday" href="https://darntough.com/products/mens-merino-wool-ridge-runner-micro-crew-no-cushion-ultra-lightweight-running-socks?variant=44451176251578" target="_blank" rel="noopener"><span class="title">Darn Tough Ridge Runner socks</span><span class="meta">Everyday</span></a>
-      <a class="item" data-cat="everyday" href="https://www.ricoh-imaging.co.jp/english/products/gr-4/" target="_blank" rel="noopener"><span class="title">Ricoh GR IV camera</span><span class="meta">Everyday</span></a>
-      <a class="item" data-cat="desk" href="https://www.muji.us/products/gel-ink-ballpoint-pen-knock-type-blue-black-10-pack-9a63007" target="_blank" rel="noopener"><span class="title">Muji gel ink pens, blue-black</span><span class="meta">Desk</span></a>
-      <a class="item" data-cat="app" href="https://justgetflux.com/" target="_blank" rel="noopener"><span class="title">f.lux, warmer screen color at night</span><span class="meta">App</span></a>
-      <a class="item" data-cat="app" href="https://retro.app" target="_blank" rel="noopener"><span class="title">Retro, a friends-only photo journal</span><span class="meta">App</span></a>
-      <a class="item" data-cat="app" href="https://withjulienne.com" target="_blank" rel="noopener"><span class="title">Julienne, save recipes from anywhere</span><span class="meta">App</span></a>
+      <a class="item" data-cat="kitchen" href="https://www.seattlecoffeegear.com/products/moccamaster-kbgv-select-coffee-maker?variant=53295195357491" target="_blank" rel="noopener"><img class="thumb" src="img/moccamaster.webp" alt="" loading="lazy"><span class="title">Moccamaster KBGV Select coffee maker</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="kitchen" href="https://cairnspring.com/products/trailblazer-bread-flour" target="_blank" rel="noopener"><img class="thumb" src="img/cairnspring.webp" alt="" loading="lazy"><span class="title">Cairnspring Mills Trailblazer bread flour</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="kitchen" href="https://www.amazon.com/dp/B091BNR2WJ" target="_blank" rel="noopener"><img class="thumb" src="img/zulay.webp" alt="" loading="lazy"><span class="title">Zulay stainless fish turner</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="kitchen" href="https://www.jonopandolfi.com/products/8-coupe-pasta-bowl?variant=37985765621912" target="_blank" rel="noopener"><img class="thumb" src="img/jono-pandolfi.webp" alt="" loading="lazy"><span class="title">Jono Pandolfi 8&Prime; coupe pasta bowl</span><span class="meta">Kitchen</span></a>
+      <a class="item" data-cat="cycling" href="https://fairlightcycles.com/strael-4-0/" target="_blank" rel="noopener"><img class="thumb" src="img/fairlight.webp" alt="" loading="lazy"><span class="title">Fairlight Strael 4.0</span><span class="meta">Cycling</span></a>
+      <a class="item" data-cat="cycling" href="https://www.albioncycling.com/products/mens-traverse-jersey-burnt-ochre_" target="_blank" rel="noopener"><img class="thumb" src="img/albion.webp" alt="" loading="lazy"><span class="title">Albion Traverse jersey, burnt ochre</span><span class="meta">Cycling</span></a>
+      <a class="item" data-cat="everyday" href="https://www.woodcraft.com/products/opinel-no-6-stainless-steel-folding-pocketknife?variant=43403563991178" target="_blank" rel="noopener"><img class="thumb" src="img/opinel.webp" alt="" loading="lazy"><span class="title">Opinel No. 6 stainless folding knife</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="everyday" href="https://www.filson.com/products/24-hour-tin-cloth-briefcase-dark-tan-2" target="_blank" rel="noopener"><img class="thumb" src="img/filson.webp" alt="" loading="lazy"><span class="title">Filson 24-Hour Tin Cloth briefcase</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="everyday" href="https://darntough.com/products/mens-merino-wool-ridge-runner-micro-crew-no-cushion-ultra-lightweight-running-socks?variant=44451176251578" target="_blank" rel="noopener"><img class="thumb" src="img/darn-tough.webp" alt="" loading="lazy"><span class="title">Darn Tough Ridge Runner socks</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="everyday" href="https://www.ricoh-imaging.co.jp/english/products/gr-4/" target="_blank" rel="noopener"><img class="thumb" src="img/ricoh.webp" alt="" loading="lazy"><span class="title">Ricoh GR IV camera</span><span class="meta">Everyday</span></a>
+      <a class="item" data-cat="desk" href="https://www.muji.us/products/gel-ink-ballpoint-pen-knock-type-blue-black-10-pack-9a63007" target="_blank" rel="noopener"><img class="thumb" src="img/muji.webp" alt="" loading="lazy"><span class="title">Muji gel ink pens, blue-black</span><span class="meta">Desk</span></a>
+      <a class="item" data-cat="app" href="https://justgetflux.com/" target="_blank" rel="noopener"><img class="thumb" src="img/flux.webp" alt="" loading="lazy"><span class="title">f.lux, warmer screen color at night</span><span class="meta">App</span></a>
+      <a class="item" data-cat="app" href="https://retro.app" target="_blank" rel="noopener"><img class="thumb" src="img/retro.webp" alt="" loading="lazy"><span class="title">Retro, a friends-only photo journal</span><span class="meta">App</span></a>
+      <a class="item" data-cat="app" href="https://withjulienne.com" target="_blank" rel="noopener"><img class="thumb" src="img/julienne.webp" alt="" loading="lazy"><span class="title">Julienne, save recipes from anywhere</span><span class="meta">App</span></a>
     </div>
   </section>
 </main>
@@ -64,6 +70,20 @@
     });
     window.addEventListener('hashchange', function () { apply(location.hash.slice(1)); });
     apply(location.hash.slice(1));
+
+    /* List or gallery view; the choice is remembered on this device */
+    var page = document.querySelector('main.page');
+    var views = Array.prototype.slice.call(document.querySelectorAll('.view-toggle button'));
+    function setView(v) {
+      if (v !== 'gallery') v = 'list';
+      page.classList.toggle('gallery', v === 'gallery');
+      views.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === v)); });
+      try { localStorage.setItem('favorites-view', v); } catch (e) {}
+    }
+    views.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
+    var saved = null;
+    try { saved = localStorage.getItem('favorites-view'); } catch (e) {}
+    setView(saved || 'gallery');   /* gallery is the default view */
   })();
 </script>
 </body>
