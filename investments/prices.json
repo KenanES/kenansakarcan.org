@@ -1,19 +1,19 @@
 {
-  "updated": "2026-11-24T08:20Z",
+  "updated": "2026-11-25T04:57Z",
   "prices": {
     "HGV": {
-      "price": 44.32,
-      "date": "2026-11-23",
+      "price": 44.62,
+      "date": "2026-11-24",
       "currency": "USD"
     },
     "051160.KQ": {
-      "price": 14830.0,
-      "date": "2026-11-24",
+      "price": 15600.0,
+      "date": "2026-11-25",
       "currency": "KRW"
     },
     "KRW=X": {
-      "price": 1342.49,
-      "date": "2026-11-24",
+      "price": 1342.98,
+      "date": "2026-11-25",
       "currency": "KRW"
     }
   }
