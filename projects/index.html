@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap">
 <link rel="stylesheet" href="../pages.css">
 <link rel="stylesheet" href="/theme.css">
+<script src="cards.js" defer></script>
 </head>
 <body>
 <main class="page">
@@ -23,24 +24,96 @@
   <table class="proj-table">
     <thead><tr><th scope="col">Link</th><th scope="col">Description</th></tr></thead>
     <tbody>
-      <tr>
+      <tr data-card="permits">
+        <td><a href="https://seattlepermits.org" target="_blank" rel="noopener">seattlepermits.org</a></td>
+        <td>A map of Seattle&rsquo;s housing permits, with the construction pipeline and how long building and land use reviews take, from Seattle Open Data</td>
+      </tr>
+      <tr data-card="fast">
         <td><a href="https://thatwasfast.org" target="_blank" rel="noopener">thatwasfast.org</a></td>
         <td>A running list of people using AI to accomplish ambitious things quickly, with what was done, how long it took, and a source. Inspired by Patrick Collison&rsquo;s Fast</td>
       </tr>
-      <tr>
+      <tr data-card="mocca">
         <td><a href="moccamaster/">Plastic-free Moccamaster</a></td>
         <td>Making a Moccamaster coffee machine plastic free with a custom laser-cut metal bracket and a ceramic pour-over dripper</td>
       </tr>
-      <tr>
+      <tr data-card="pets">
         <td><a href="https://petsofseattle.org" target="_blank" rel="noopener">petsofseattle.org</a></td>
         <td>Mapped every pet license in Seattle and built an interactive site, map, and name comparison features using Seattle Open Data</td>
       </tr>
-      <tr>
+      <tr data-card="reads">
         <td><a href="https://seattlereads.org" target="_blank" rel="noopener">seattlereads.org</a></td>
         <td>Made a website using Seattle Open Data to track the top 100 books across each genre checked out at Seattle Public Library</td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Hover cards (wide screens only, see cards.js): design system and stack for each row -->
+  <template id="card-permits">
+    <p class="pc-kicker">Design system</p>
+    <p class="pc-name">Civic broadsheet</p>
+    <div class="pc-sw"><i style="background:#faf7f2"></i><i style="background:#171614"></i><i style="background:#1b4d3e"></i><i style="background:#234e70"></i><i style="background:#96520e"></i><i style="background:#b23225"></i></div>
+    <p>Newspaper-style layout on warm paper. Newsreader for headlines, Public Sans for text, IBM Plex Mono for figures.</p>
+    <p class="pc-kicker">Architecture</p>
+    <ul>
+      <li>Plain HTML, CSS and ES modules, no build step</li>
+      <li>Browser queries Seattle SDCI open data APIs live (building, land use and trade permits), with a bundled snapshot as fallback</li>
+      <li>Charts and ZIP map drawn as hand-built SVG, no chart library</li>
+      <li>llms.txt and a JSON summary for machines</li>
+      <li>Hosted on Vercel</li>
+    </ul>
+  </template>
+  <template id="card-fast">
+    <p class="pc-kicker">Design system</p>
+    <p class="pc-name">A plain list, like Fast</p>
+    <div class="pc-sw"><i style="background:#ffffff"></i><i style="background:#111111"></i><i style="background:#6b6b6b"></i><i style="background:#e4e4e4"></i><i style="background:#b3261e"></i></div>
+    <p>Iowan Old Style serif for reading, system sans for labels, one red accent.</p>
+    <p class="pc-kicker">Architecture</p>
+    <ul>
+      <li>Static pages plus one serverless function on Vercel</li>
+      <li>Each entry is a JSON file in git; pushing to main deploys</li>
+      <li>A daily GitHub Action finds new candidates with Grok search and opens a pull request for each; merging publishes</li>
+      <li>Resend for double opt-in sign-ups and a quarterly digest drafted by Vercel Cron</li>
+    </ul>
+  </template>
+  <template id="card-mocca">
+    <p class="pc-kicker">Design</p>
+    <p class="pc-name">Match the factory trim</p>
+    <div class="pc-sw"><i style="background:#1c1c1c"></i><i style="background:#c9c9c6"></i><i style="background:#f4f2ee"></i><i style="background:#b8a27c"></i></div>
+    <p>Matte black powder coat to match the Moccamaster, a ceramic Hario V60 and the glass carafe.</p>
+    <p class="pc-kicker">How it was made</p>
+    <ul>
+      <li>Requirements document written with an LLM</li>
+      <li>Parametric CAD in OpenSCAD, exported as a DXF flat pattern</li>
+      <li>Laser cut and press-brake bent by SendCutSend in 2&nbsp;mm 5052 aluminum</li>
+      <li>Bolts to the machine&rsquo;s existing screw holes</li>
+    </ul>
+  </template>
+  <template id="card-pets">
+    <p class="pc-kicker">Design system</p>
+    <p class="pc-name">Friendly and hand-drawn</p>
+    <div class="pc-sw"><i style="background:#f7f6f1"></i><i style="background:#173d2e"></i><i style="background:#eab53b"></i><i style="background:#2a78d6"></i><i style="background:#eb6834"></i><i style="background:#1baf7a"></i></div>
+    <p>Bricolage Grotesque headings, DM Sans text, Patrick Hand notes, and my own drawings. Each species has its own color.</p>
+    <p class="pc-kicker">Architecture</p>
+    <ul>
+      <li>Static pages with shared vanilla JavaScript, no framework</li>
+      <li>Pulls Seattle&rsquo;s pet license data from data.seattle.gov in the browser</li>
+      <li>Neighborhood map drawn from Census ZIP shapes trimmed to city limits</li>
+      <li>Cloudflare Pages with a strict Content Security Policy, GoatCounter analytics and a Buttondown newsletter</li>
+    </ul>
+  </template>
+  <template id="card-reads">
+    <p class="pc-kicker">Design system</p>
+    <p class="pc-name">A library, sketched</p>
+    <div class="pc-sw"><i style="background:#f5efe4"></i><i style="background:#23180f"></i><i style="background:#b5442c"></i><i style="background:#2f5d3a"></i><i style="background:#d6ad5c"></i></div>
+    <p>Book covers float over my pencil sketch of the Central Library. Fraunces headings with Jost and Inter.</p>
+    <p class="pc-kicker">Architecture</p>
+    <ul>
+      <li>Cloudflare Worker renders every page on the server for search engines</li>
+      <li>R2 stores the lists and covers, D1 stores subscribers</li>
+      <li>A GitHub Action rebuilds the Top 100 lists from Seattle Public Library checkout data</li>
+      <li>Resend sends the monthly email digest</li>
+    </ul>
+  </template>
 </main>
 </body>
 </html>
